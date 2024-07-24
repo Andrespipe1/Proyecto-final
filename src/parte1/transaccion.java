@@ -4,20 +4,19 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class inventario extends JFrame{
-    private JButton button1;
+public class transaccion extends JFrame{
+    private JButton comprar;
     private JPanel panel1;
-    private JButton regresarButton;
+    private JTextField textField1;
+    private JButton buscarButton;
 
-    public inventario() {
-        super("Ventana Inventarios");
+    public transaccion() {
+        super("Transacciones");
         setContentPane(panel1);
-        regresarButton.addActionListener(new ActionListener() {
+        comprar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                principal vprin = new principal();
-                vprin.iniciar();
-                dispose();
+
             }
         });
     }

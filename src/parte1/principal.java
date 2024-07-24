@@ -34,7 +34,9 @@ public class principal extends JFrame{
         inventario.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                inventario vinv = new inventario();
+                vinv.iniciar();
+                dispose();
             }
         });
         salir.addActionListener(new ActionListener() {

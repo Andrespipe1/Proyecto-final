@@ -5,5 +5,4 @@ public class Main {
         login vlog = new login();
         vlog.iniciar();
     }
-
 }

@@ -10,6 +10,7 @@ public class login extends JFrame{
     private JPanel panel1;
     private JTextField user;
     private JTextField pass;
+    private JButton usuarioButton;
 
     public login() {
         super("Ventana de Login");
@@ -18,7 +19,17 @@ public class login extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    verificarDatos();
+                    verificarDatosAdmin();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        usuarioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    verificarDatosCajero();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -31,7 +42,7 @@ public class login extends JFrame{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     }
-    public void verificarDatos() throws SQLException {
+    public void verificarDatosAdmin() throws SQLException {
         String usering= user.getText();
         String passing= pass.getText();
         Connection connection= conexion();
@@ -45,6 +56,28 @@ public class login extends JFrame{
                 principal vprinc = new principal();
                 vprinc.iniciar();
                 dispose();
+
+        } else {
+            JOptionPane.showMessageDialog(null,"Usuario o contraseña incorrectos.");
+        }
+        rs.close();
+        pstmt.close();
+        connection.close();
+    }
+    public void verificarDatosCajero() throws SQLException {
+        String usering= user.getText();
+        String passing= pass.getText();
+        Connection connection= conexion();
+        String sql = "SELECT * FROM Cajeros WHERE usuario = ? AND contrasena = ?";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, usering);
+        pstmt.setString(2, passing);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            JOptionPane.showMessageDialog(null,"Bienvenid@ "+usering);
+            transaccion vtrans = new transaccion();
+            vtrans.iniciar();
+            dispose();
 
         } else {
             JOptionPane.showMessageDialog(null,"Usuario o contraseña incorrectos.");
