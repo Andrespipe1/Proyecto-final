@@ -42,7 +42,9 @@ public class login extends JFrame{
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
             JOptionPane.showMessageDialog(null,"Bienvenid@ "+usering);
-
+                principal vprinc = new principal();
+                vprinc.iniciar();
+                dispose();
 
         } else {
             JOptionPane.showMessageDialog(null,"Usuario o contraseña incorrectos.");
