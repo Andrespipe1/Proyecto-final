@@ -78,7 +78,6 @@ public class login extends JFrame{
             transaccion vtrans = new transaccion();
             vtrans.iniciar();
             dispose();
-
         } else {
             JOptionPane.showMessageDialog(null,"Usuario o contraseña incorrectos.");
         }

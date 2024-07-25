@@ -21,7 +21,11 @@ public class usuarios extends JFrame{
         buscarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    buscarDatos();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         regresarButton.addActionListener(new ActionListener() {
@@ -30,6 +34,16 @@ public class usuarios extends JFrame{
                 principal vprin = new principal();
                 vprin.iniciar();
                 dispose();
+            }
+        });
+        eliminarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    eliminarDatos();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
     }
@@ -48,26 +62,37 @@ public class usuarios extends JFrame{
     }
 
     public void buscarDatos() throws SQLException {
-        int id_usuario = Integer.parseInt(datos.getText());
+        int id_usuario = Integer.parseInt(userb.getText());
         Connection connection = conexion();
-        String sql = "Select * from PACIENTE where n_historial_clinico=?;";
+        String sql = "Select * from Cajeros where cajero_id=?;";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setInt(1, id_usuario);
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
-            String cedul = rs.getString("cedula");
-            String histori = rs.getString("n_historial_clinico");
-            String nombre = rs.getString("nombre");
-            String apellido = rs.getString("apellido");
-            String telefono = rs.getString("telefono");
-            String edad = rs.getString("edad");
-            String desc = rs.getString("descripcion_enfermedad");
-            datos.setText("Cedula: "+cedul+" N° historial Clinico"+histori+"\n Nombre: "+nombre+" "+apellido+" Telf: "+telefono+" Edad: "+edad+" Enfermedad: "+desc);
-            setSize(1000,500);
+            int id = rs.getInt("cajero_id");
+            String nombre = rs.getString("usuario");
+            String contra = rs.getString("contrasena");
+            datos.setText("- ID: "+id+" - Nombre: "+nombre+" - Contraseña: "+contra);
         } else {
             JOptionPane.showMessageDialog(null, "No se encontró un registro con ese código");
         }
         rs.close();
+        pstmt.close();
+        connection.close();
+    }
+    public void eliminarDatos() throws SQLException {
+        int id_cajero = Integer.parseInt(userb.getText());
+        Connection connection = conexion();
+        String sql = "DELETE FROM Cajeros WHERE cajero_id = ?;";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1, id_cajero);
+        int rowsAffected = pstmt.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "Ssuario eliminado exitosamente");
+            datos.setText("-");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró un registro con ese número de historial clínico");
+        }
         pstmt.close();
         connection.close();
     }
