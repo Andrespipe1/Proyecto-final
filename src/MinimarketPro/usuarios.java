@@ -1,4 +1,4 @@
-package parte1;
+package MinimarketPro;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -12,8 +12,9 @@ public class usuarios extends JFrame{
     private JButton eliminarButton;
     private JButton actualizarDatosButton;
     private JButton crearUnNuevoUsuarioButton;
-    private JLabel datos;
     private JButton regresarButton;
+    private JTextField usuario;
+    private JTextField password;
 
     public usuarios(){
         super("Administrar Usuarios");
@@ -46,6 +47,26 @@ public class usuarios extends JFrame{
                 }
             }
         });
+        actualizarDatosButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    actualizarDatos();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        crearUnNuevoUsuarioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    crearDatos();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
     public void iniciar(){
         setVisible(true);
@@ -72,7 +93,8 @@ public class usuarios extends JFrame{
             int id = rs.getInt("cajero_id");
             String nombre = rs.getString("usuario");
             String contra = rs.getString("contrasena");
-            datos.setText("- ID: "+id+" - Nombre: "+nombre+" - Contraseña: "+contra);
+            usuario.setText(nombre);
+            password.setText(contra);
         } else {
             JOptionPane.showMessageDialog(null, "No se encontró un registro con ese código");
         }
@@ -88,13 +110,59 @@ public class usuarios extends JFrame{
         pstmt.setInt(1, id_cajero);
         int rowsAffected = pstmt.executeUpdate();
         if (rowsAffected > 0) {
-            JOptionPane.showMessageDialog(null, "Ssuario eliminado exitosamente");
-            datos.setText("-");
+            JOptionPane.showMessageDialog(null, "Usuario eliminado exitosamente");
+            usuario.setText("");
+            password.setText("");
         } else {
             JOptionPane.showMessageDialog(null, "No se encontró un registro con ese número de historial clínico");
         }
         pstmt.close();
         connection.close();
     }
+    public void actualizarDatos() throws SQLException {
+        int id_cajero = Integer.parseInt(userb.getText());
+        String nuevoUsuario = usuario.getText();
+        String nuevaContrasena = password.getText();
+
+        Connection connection = conexion();
+        String sql = "UPDATE Cajeros SET usuario = ?, contrasena = ? WHERE cajero_id = ?;";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, nuevoUsuario);
+        pstmt.setString(2, nuevaContrasena);
+        pstmt.setInt(3, id_cajero);
+
+        int rowsAffected = pstmt.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "Usuario actualizado exitosamente");
+            usuario.setText("");
+            password.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró un registro con ese número de historial clínico");
+        }
+        pstmt.close();
+        connection.close();
+    }
+    public void crearDatos() throws SQLException {
+        String nuevoUsuario = usuario.getText();
+        String nuevaContrasena = password.getText();
+
+        Connection connection = conexion();
+        String sql = "INSERT INTO Cajeros (usuario, contrasena) VALUES (?, ?);";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, nuevoUsuario);
+        pstmt.setString(2, nuevaContrasena);
+
+        int rowsAffected = pstmt.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
+            usuario.setText("");
+            password.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al crear el usuario");
+        }
+        pstmt.close();
+        connection.close();
+    }
+
 }
 

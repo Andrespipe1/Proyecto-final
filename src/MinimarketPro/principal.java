@@ -1,4 +1,4 @@
-package parte1;
+package MinimarketPro;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -1,22 +1,24 @@
-package parte1;
+package MinimarketPro;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class transaccion extends JFrame{
-    private JButton comprar;
+public class ventas extends JFrame{
+    private JButton button1;
     private JPanel panel1;
-    private JTextField textField1;
-    private JButton buscarButton;
+    private JButton button2;
+    private JButton regresarButton;
 
-    public transaccion() {
-        super("Transacciones");
+    public ventas() {
+        super("Ventana de Ventas");
         setContentPane(panel1);
-        comprar.addActionListener(new ActionListener() {
+        regresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                principal vprin = new principal();
+                vprin.iniciar();
+                dispose();
             }
         });
     }

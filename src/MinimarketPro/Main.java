@@ -1,4 +1,4 @@
-package parte1;
+package MinimarketPro;
 
 public class Main {
     public static void main (String[] args){
