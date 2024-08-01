@@ -6,10 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class inventario extends JFrame{
     private JButton eliminarProductoButton;
@@ -39,13 +36,21 @@ public class inventario extends JFrame{
         actualizarProductoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    actualizarDatos();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         eliminarProductoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    eliminarDatos();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
         agregarProductoButton.addActionListener(new ActionListener() {
@@ -69,10 +74,21 @@ public class inventario extends JFrame{
                 stock.setText("");
             }
         });
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    buscarDatos();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
     public void iniciar(){
         setVisible(true);
         setSize(600,500);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     }
@@ -81,6 +97,31 @@ public class inventario extends JFrame{
         String user="uvbmbtmpi0evah2t";
         String password="MYVCKxotJa0TSwg1SAT3";
         return DriverManager.getConnection(url,user,password);
+    }
+    public void actualizarDatos() throws SQLException {
+        int id_prod = Integer.parseInt(id_buscar.getText());
+        String nuevoNom = nom.getText();
+        String nuevaDesc = desc.getText();
+        double nuevoPrecio = Double.parseDouble(precio.getText());
+        int nuevoStock = Integer.parseInt(stock.getText());
+
+        Connection connection = conexion();
+        String sql = "UPDATE Productos SET nombre_producto=?, descripcion=?, precio=?, stock=? WHERE producto_id=?;";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, nuevoNom);
+        pstmt.setString(2, nuevaDesc);
+        pstmt.setDouble(3, nuevoPrecio);
+        pstmt.setInt(4, nuevoStock);
+        pstmt.setInt(5, id_prod);
+
+        int rowsAffected = pstmt.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "Producto actualizado exitosamente");
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al actualizar el producto");
+        }
+        pstmt.close();
+        connection.close();
     }
     public void agregarProductos() throws SQLException, IOException {
         String nombre = nom.getText();
@@ -120,6 +161,53 @@ public class inventario extends JFrame{
             pstmt.close();
             connection.close();
         }
+    }
+    public void buscarDatos() throws SQLException {
+        int id_prod = Integer.parseInt(id_buscar.getText());
+        Connection connection = conexion();
+        String sql = "Select * from Productos where producto_id=?;";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1, id_prod);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+
+            String nombre = rs.getString("nombre_producto");
+            String descrip = rs.getString("descripcion");
+            String precios = rs.getString("precio");
+            String cantidad = rs.getString("stock");
+            nom.setText(nombre);
+            desc.setText(descrip);
+            precio.setText(precios);
+            stock.setText(cantidad);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "No se encontró un registro con ese código");
+        }
+        rs.close();
+        pstmt.close();
+        connection.close();
+    }
+    public void eliminarDatos() throws SQLException {
+        int id_prod = Integer.parseInt(id_buscar.getText());
+
+        Connection connection = conexion();
+        String sql = "DELETE FROM Productos WHERE producto_id = ?;";
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1, id_prod);
+
+        int rowsAffected = pstmt.executeUpdate();
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null, "Producto eliminado exitosamente");
+            id_buscar.setText("");
+            nom.setText("");
+            desc.setText("");
+            precio.setText("");
+            stock.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al eliminar el registro");
+        }
+        pstmt.close();
+        connection.close();
     }
 
 }

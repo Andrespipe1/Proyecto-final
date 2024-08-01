@@ -39,6 +39,7 @@ public class login extends JFrame{
     public void iniciar(){
         setVisible(true);
         setSize(600,500);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     }
@@ -75,7 +76,7 @@ public class login extends JFrame{
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
             JOptionPane.showMessageDialog(null,"Bienvenid@ "+usering);
-            transaccion vtrans = new transaccion();
+            ventana_cajero vtrans = new ventana_cajero();
             vtrans.iniciar();
             dispose();
         } else {

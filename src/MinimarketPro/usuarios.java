@@ -71,6 +71,7 @@ public class usuarios extends JFrame{
     public void iniciar(){
         setVisible(true);
         setSize(600,500);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     }
@@ -90,7 +91,6 @@ public class usuarios extends JFrame{
         pstmt.setInt(1, id_usuario);
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
-            int id = rs.getInt("cajero_id");
             String nombre = rs.getString("usuario");
             String contra = rs.getString("contrasena");
             usuario.setText(nombre);

@@ -25,6 +25,7 @@ public class ventas extends JFrame{
     public void iniciar(){
         setVisible(true);
         setSize(600,500);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     }
