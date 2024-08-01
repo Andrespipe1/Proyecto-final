@@ -9,7 +9,7 @@ public class login extends JFrame{
     private JButton loginButton;
     private JPanel panel1;
     private JTextField user;
-    private JTextField pass;
+    private JPasswordField pass;
     private JButton usuarioButton;
 
     public login() {
@@ -45,7 +45,7 @@ public class login extends JFrame{
     }
     public void verificarDatosAdmin() throws SQLException {
         String usering= user.getText();
-        String passing= pass.getText();
+        String passing = new String(pass.getPassword());
         Connection connection= conexion();
         String sql = "SELECT * FROM login WHERE username = ? AND password = ?";
         PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -53,7 +53,7 @@ public class login extends JFrame{
         pstmt.setString(2, passing);
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
-            JOptionPane.showMessageDialog(null,"Bienvenid@ "+usering);
+            JOptionPane.showMessageDialog(null,"Bienvenid@ Administrador "+usering);
                 principal vprinc = new principal();
                 vprinc.iniciar();
                 dispose();
@@ -67,7 +67,7 @@ public class login extends JFrame{
     }
     public void verificarDatosCajero() throws SQLException {
         String usering= user.getText();
-        String passing= pass.getText();
+        String passing = new String(pass.getPassword());
         Connection connection= conexion();
         String sql = "SELECT * FROM Cajeros WHERE usuario = ? AND contrasena = ?";
         PreparedStatement pstmt = connection.prepareStatement(sql);
@@ -75,7 +75,7 @@ public class login extends JFrame{
         pstmt.setString(2, passing);
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
-            JOptionPane.showMessageDialog(null,"Bienvenid@ "+usering);
+            JOptionPane.showMessageDialog(null,"Bienvenid@ Usuario Cajero "+usering);
             ventana_cajero vtrans = new ventana_cajero();
             vtrans.iniciar();
             dispose();

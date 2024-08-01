@@ -11,17 +11,6 @@ public class ventana_cajero extends JFrame{
 
     public ventana_cajero() {
         super("Ventana Cajero");
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         setContentPane(panel1);
         transaccionesCompraButton.addActionListener(new ActionListener() {
             @Override
