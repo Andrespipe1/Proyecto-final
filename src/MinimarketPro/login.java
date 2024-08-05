@@ -54,7 +54,7 @@ public class login extends JFrame{
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
             JOptionPane.showMessageDialog(null,"Bienvenid@ Administrador "+usering);
-                principal vprinc = new principal();
+                menu vprinc = new menu();
                 vprinc.iniciar();
                 dispose();
 
@@ -75,8 +75,9 @@ public class login extends JFrame{
         pstmt.setString(2, passing);
         ResultSet rs = pstmt.executeQuery();
         if (rs.next()) {
+            int cajeroId = rs.getInt("cajero_id");
             JOptionPane.showMessageDialog(null,"Bienvenid@ Usuario Cajero "+usering);
-            ventana_cajero vtrans = new ventana_cajero();
+            menu_cajero vtrans = new menu_cajero(cajeroId);
             vtrans.iniciar();
             dispose();
         } else {

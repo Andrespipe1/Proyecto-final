@@ -16,9 +16,7 @@ public class ventas extends JFrame{
         regresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                principal vprin = new principal();
-                vprin.iniciar();
-                dispose();
+
             }
         });
     }
