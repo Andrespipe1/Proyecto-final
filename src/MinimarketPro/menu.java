@@ -96,6 +96,8 @@ public class menu extends JFrame{
                     actualizarDatosInv();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         });
@@ -237,7 +239,7 @@ public class menu extends JFrame{
         connection.close();
     }
     /*Funciones para inventarios*/
-    public void actualizarDatosInv() throws SQLException {
+    public void actualizarDatosInv() throws SQLException, IOException {
         int id_prod = Integer.parseInt(id_buscar.getText());
         String nuevoNom = nom.getText();
         String nuevaDesc = desc.getText();
@@ -245,19 +247,47 @@ public class menu extends JFrame{
         int nuevoStock = Integer.parseInt(stock.getText());
 
         Connection connection = conexion();
-        String sql = "UPDATE Productos SET nombre_producto=?, descripcion=?, precio=?, stock=? WHERE producto_id=?;";
+
+        // Abre un diálogo para seleccionar una nueva imagen
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FileInputStream fis = null;
+        String nombreImagen = null;
+
+        int result = fileChooser.showOpenDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            nombreImagen = selectedFile.getName();
+            fis = new FileInputStream(selectedFile);
+        }
+
+        // Consulta SQL para actualizar los datos del producto
+        String sql = "UPDATE Productos SET nombre_producto=?, descripcion=?, precio=?, stock=?, nombreimagen=?, imagen=? WHERE producto_id=?";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setString(1, nuevoNom);
         pstmt.setString(2, nuevaDesc);
         pstmt.setDouble(3, nuevoPrecio);
         pstmt.setInt(4, nuevoStock);
-        pstmt.setInt(5, id_prod);
+
+        if (fis != null) {
+            pstmt.setString(5, nombreImagen);
+            pstmt.setBinaryStream(6, fis, (int) new File(fileChooser.getSelectedFile().getAbsolutePath()).length());
+        } else {
+            pstmt.setNull(5, java.sql.Types.VARCHAR);
+            pstmt.setNull(6, java.sql.Types.BLOB);
+        }
+
+        pstmt.setInt(7, id_prod);
 
         int rowsAffected = pstmt.executeUpdate();
         if (rowsAffected > 0) {
             JOptionPane.showMessageDialog(null, "Producto actualizado exitosamente");
         } else {
             JOptionPane.showMessageDialog(null, "Error al actualizar el producto");
+        }
+
+        if (fis != null) {
+            fis.close();
         }
         pstmt.close();
         connection.close();
