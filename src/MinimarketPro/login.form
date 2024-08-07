@@ -21,6 +21,8 @@
           <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
+          <background color="-16542464"/>
+          <foreground color="-2828"/>
           <text value="Administrador"/>
         </properties>
       </component>
@@ -81,17 +83,9 @@
           <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <text value="Usuario"/>
-        </properties>
-      </component>
-      <component id="1a562" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <background color="-15329770"/>
-          <icon value="user.png"/>
-          <text value=""/>
+          <background color="-16542464"/>
+          <foreground color="-2828"/>
+          <text value="Cajero"/>
         </properties>
       </component>
       <component id="434ab" class="javax.swing.JTextField" binding="user">
@@ -116,6 +110,16 @@
         <clientProperties>
           <html.disable class="java.lang.Boolean" value="false"/>
         </clientProperties>
+      </component>
+      <component id="1a562" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-15329770"/>
+          <icon value="user.png"/>
+          <text value=""/>
+        </properties>
       </component>
     </children>
   </grid>

@@ -1,6 +1,9 @@
 package MinimarketPro;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -29,10 +32,22 @@ public class menu extends JFrame{
     private JButton agregarProductoButton;
     private JButton limpiarButton;
     private JButton buscarInv;
+    private JTable table1;
+    private JButton buscarVentas;
+    private JTextField idCajerov;
 
     public menu() {
         super("Ventana Admin");
         setContentPane(panel1);
+        /*Configuracionde la tabla de ventas*/
+        String[] columnNames = {"ID Venta", "ID Cajero","Nombre Cajero", "Fecha"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        table1.setModel(model);
+        // Cambiar color de los encabezados de la tabla
+        JTableHeader header = table1.getTableHeader();
+        header.setBackground(Color.BLUE); // Color de fondo
+        header.setForeground(Color.WHITE); // Color del texto
+        header.setFont(new Font("Arial", Font.BOLD, 14));
 
         /*Este apartado tiene la pestaña de usuarios*/
 
@@ -137,6 +152,16 @@ public class menu extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                     buscarDatosInv();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        buscarVentas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    cargarVentasCajero();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -378,4 +403,33 @@ public class menu extends JFrame{
         pstmt.close();
         connection.close();
     }
+    public void cargarVentasCajero() throws SQLException {
+        int cajeroId = Integer.parseInt(idCajerov.getText()); // ID del cajero a buscar
+        Connection connection = conexion();
+        String sql = "SELECT t.transaccion_id, t.cajero_id, c.usuario, t.fecha " +
+                "FROM Transacciones t " +
+                "JOIN Cajeros c ON t.cajero_id = c.cajero_id " +
+                "WHERE t.cajero_id = ?";
+
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        pstmt.setInt(1, cajeroId);
+        ResultSet rs = pstmt.executeQuery();
+
+        DefaultTableModel model = (DefaultTableModel) table1.getModel();
+        model.setRowCount(0); // Limpiar la tabla antes de cargar los datos
+
+        while (rs.next()) {
+            int idVenta = rs.getInt("transaccion_id");
+            int idCajero = rs.getInt("cajero_id");
+            String nombreCajero = rs.getString("usuario");
+            Date fecha = rs.getDate("fecha");
+
+            model.addRow(new Object[]{idVenta,idCajero, nombreCajero, fecha});
+        }
+
+        rs.close();
+        pstmt.close();
+        connection.close();
+    }
+
 }
