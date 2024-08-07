@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="clase_7am:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/clase_7am_jar</output-path>
+    <root id="archive" name="clase_7am.jar">
+      <element id="module-output" name="clase_7am" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/jar_files/itextpdf-5.5.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/mysql-connector-j-9.0.0/mysql-connector-j-9.0.0/mysql-connector-j-9.0.0/mysql-connector-j-9.0.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
