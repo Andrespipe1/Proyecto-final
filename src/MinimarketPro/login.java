@@ -5,12 +5,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
 
+/**
+ * Clase que representa la ventana de login para el sistema del minimarket.
+ * Permite a los usuarios administradores y cajeros iniciar sesión en el sistema.
+ *
+ * @author Andres Tufiño
+ * @version 1.0.01
+ */
 public class login extends JFrame{
     private JButton loginButton;
     private JPanel panel1;
     private JTextField user;
     private JPasswordField pass;
     private JButton usuarioButton;
+
+    /**
+     * Constructor de la clase login.
+     * Configura la ventana de login y define las acciones de los botones.
+     */
 
     public login() {
         super("Ventana de Login");
@@ -36,13 +48,22 @@ public class login extends JFrame{
             }
         });
     }
+    /**
+     * Inicia la ventana de login.
+     * Establece la visibilidad, tamaño y comportamiento de cierre de la ventana.
+     */
     public void iniciar(){
         setVisible(true);
         setSize(600,500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
     }
+    /**
+     * Verifica los datos ingresados por el administrador en la base de datos.
+     * Si los datos son correctos, inicia el menú principal del administrador.
+     *
+     * @throws SQLException Si ocurre un error al conectar con la base de datos.
+     */
     public void verificarDatosAdmin() throws SQLException {
         String usering= user.getText();
         String passing = new String(pass.getPassword());
@@ -65,6 +86,12 @@ public class login extends JFrame{
         pstmt.close();
         connection.close();
     }
+    /**
+     * Verifica los datos ingresados por el cajero en la base de datos.
+     * Si los datos son correctos, inicia el menú del cajero.
+     *
+     * @throws SQLException Si ocurre un error al conectar con la base de datos.
+     */
     public void verificarDatosCajero() throws SQLException {
         String usering= user.getText();
         String passing = new String(pass.getPassword());
@@ -87,6 +114,12 @@ public class login extends JFrame{
         pstmt.close();
         connection.close();
     }
+    /**
+     * Establece la conexión con la base de datos.
+     *
+     * @return La conexión establecida con la base de datos.
+     * @throws SQLException Si ocurre un error al conectar con la base de datos.
+     */
     public Connection conexion() throws SQLException {
         String url="jdbc:mysql://uvbmbtmpi0evah2t:MYVCKxotJa0TSwg1SAT3@b4i0oz9mmhxht77tkqpd-mysql.services.clever-cloud.com:3306/b4i0oz9mmhxht77tkqpd";
         String user="uvbmbtmpi0evah2t";

@@ -42,6 +42,8 @@ public class menu extends JFrame{
     private JTable table1;
     private JButton buscarVentas;
     private JTextField idCajerov;
+    private JTable table2;
+    private JButton verCajerosButton;
 
     /**
      * Constructor de la clase `menu`.
@@ -55,11 +57,23 @@ public class menu extends JFrame{
         String[] columnNames = {"ID Venta", "ID Cajero","Nombre Cajero", "Fecha"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0);
         table1.setModel(model);
-        // Cambiar color de los encabezados de la tabla
+
+        //Configuracion de la tabla de cajeros usuarios;
+        String[] columnNames1= {"ID Cajero","Nombre","Cargo"};
+        DefaultTableModel model2 = new DefaultTableModel(columnNames1,0);
+        table2.setModel(model2);
+
+        // Cambiar color de los encabezados de la tabla de reportes
         JTableHeader header = table1.getTableHeader();
         header.setBackground(Color.BLUE); // Color de fondo
         header.setForeground(Color.WHITE); // Color del texto
         header.setFont(new Font("Arial", Font.BOLD, 14));
+
+        // Cambiar color de los encabezados de la tabla de cajeros
+        JTableHeader header1 = table2.getTableHeader();
+        header1.setBackground(Color.BLUE); // Color de fondo
+        header1.setForeground(Color.WHITE); // Color del texto
+        header1.setFont(new Font("Arial", Font.BOLD, 14));
 
         /*Este apartado tiene la pestaña de usuarios*/
 
@@ -174,6 +188,16 @@ public class menu extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                     cargarVentasCajero();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        verCajerosButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    cargarCajeros();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -502,6 +526,33 @@ public class menu extends JFrame{
             Date fecha = rs.getDate("fecha");
 
             model.addRow(new Object[]{idVenta,idCajero, nombreCajero, fecha});
+        }
+
+        rs.close();
+        pstmt.close();
+        connection.close();
+    }
+    /**
+     * Carga todos los cajeros de la base de datos y los muestra en la tabla.
+     *
+     * @throws SQLException Si ocurre un error en la consulta SQL.
+     */
+    public void cargarCajeros() throws SQLException {
+        Connection connection = conexion();
+        String sql = "SELECT cajero_id, usuario, cargo FROM Cajeros WHERE cargo = 'Cajero';";
+
+        PreparedStatement pstmt = connection.prepareStatement(sql);
+        ResultSet rs = pstmt.executeQuery();
+
+        DefaultTableModel model = (DefaultTableModel) table2.getModel();
+        model.setRowCount(0); // Limpiar la tabla antes de cargar los datos
+
+        while (rs.next()) {
+            int idCajero = rs.getInt("cajero_id");
+            String nombreCajero = rs.getString("usuario");
+            String cargo = rs.getString("cargo");
+
+            model.addRow(new Object[]{idCajero, nombreCajero, cargo});
         }
 
         rs.close();
