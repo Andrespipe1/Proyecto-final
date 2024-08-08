@@ -155,7 +155,7 @@ public class menu_cajero extends JFrame{
      * @throws SQLException Si ocurre un error al acceder a la base de datos.
      */
     public void cargarTodosLosProductos() throws SQLException {
-        Connection connection = conexion();
+        Connection connection = ConexionBd.obtenerConexion();
         String sql = "SELECT producto_id, nombre_producto, descripcion, precio, stock, imagen FROM Productos";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
@@ -191,7 +191,7 @@ public class menu_cajero extends JFrame{
      * @throws SQLException Si ocurre un error al acceder a la base de datos.
      */
     public void cargarProductosCarrito() throws SQLException {
-        Connection connection = conexion();
+        Connection connection = ConexionBd.obtenerConexion();
         String sql = "SELECT c.producto_id, p.nombre_producto, c.cantidad, p.precio " +
                 "FROM Carrito c " +
                 "JOIN Productos p ON c.producto_id = p.producto_id " +
@@ -224,7 +224,7 @@ public class menu_cajero extends JFrame{
      */
     public void buscarProducto() throws SQLException {
         int id_prod=Integer.parseInt(idBuscar.getText());
-        Connection connection = conexion();
+        Connection connection = ConexionBd.obtenerConexion();
         String sql = "SELECT producto_id, nombre_producto, descripcion, precio, stock, imagen FROM Productos WHERE producto_id=?";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setInt(1, id_prod);
@@ -263,7 +263,7 @@ public class menu_cajero extends JFrame{
      */
     public void agregarAlCarrito() throws SQLException {
         int productId = Integer.parseInt(idBuscar.getText());
-        Connection connection = conexion();
+        Connection connection = ConexionBd.obtenerConexion();
 
         // Verificar stock y agregar al carrito
         String sql = "SELECT stock FROM Productos WHERE producto_id=?";
@@ -303,7 +303,7 @@ public class menu_cajero extends JFrame{
      * @throws IOException Si ocurre un error al guardar el archivo PDF.
      */
     public void realizarCompra() throws SQLException, DocumentException, IOException {
-        Connection connection = conexion();
+        Connection connection = ConexionBd.obtenerConexion();
         // Formateador para los precios
         DecimalFormat df = new DecimalFormat("#.00");
         // Obtener productos del carrito
@@ -422,7 +422,7 @@ public class menu_cajero extends JFrame{
      * @throws SQLException Si ocurre un error al acceder a la base de datos.
      */
     public void cancelarCompra() throws SQLException {
-        Connection connection = conexion();
+        Connection connection = ConexionBd.obtenerConexion();
         // Eliminar todos los productos del carrito para el cajero actual
         String deleteCarritoSql = "DELETE FROM Carrito WHERE cajero_id = ?";
         PreparedStatement pstmt = connection.prepareStatement(deleteCarritoSql);
@@ -441,20 +441,6 @@ public class menu_cajero extends JFrame{
         pstmt.close();
         connection.close();
     }
-
-    /**
-     * Establece la conexión con la base de datos.
-     *
-     * @return La conexión a la base de datos.
-     * @throws SQLException Si ocurre un error al establecer la conexión.
-     */
-    public Connection conexion() throws SQLException {
-        String url = "jdbc:mysql://uvbmbtmpi0evah2t:MYVCKxotJa0TSwg1SAT3@b4i0oz9mmhxht77tkqpd-mysql.services.clever-cloud.com:3306/b4i0oz9mmhxht77tkqpd";
-        String user = "uvbmbtmpi0evah2t";
-        String password = "MYVCKxotJa0TSwg1SAT3";
-        return DriverManager.getConnection(url, user, password);
-    }
-
     /**
      * Muestra la ventana del cajero con la configuración inicial.
      */

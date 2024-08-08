@@ -223,6 +223,7 @@
                     <constraints/>
                     <properties>
                       <background color="-1773569"/>
+                      <rowHeight value="25"/>
                     </properties>
                   </component>
                 </children>
