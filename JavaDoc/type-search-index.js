@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"MinimarketPro","l":"ConexionBd"},{"p":"MinimarketPro","l":"ImageRender"},{"p":"MinimarketPro","l":"login"},{"p":"MinimarketPro","l":"Main"},{"p":"MinimarketPro","l":"menu"},{"p":"MinimarketPro","l":"menu_cajero"}];updateSearchResults();
