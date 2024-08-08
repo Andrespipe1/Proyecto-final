@@ -11,6 +11,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 
+/**
+ * Clase que representa la ventana principal de administración del minimarket.
+ * Permite gestionar usuarios, productos e inventarios.
+ *
+ * @author Andrés Tufiño
+ * @version 1.0.1
+ */
 public class menu extends JFrame{
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
@@ -36,6 +43,11 @@ public class menu extends JFrame{
     private JButton buscarVentas;
     private JTextField idCajerov;
 
+    /**
+     * Constructor de la clase `menu`.
+     * Configura el JFrame con el contenido del panel y establece los modelos de tabla para las ventas.
+     * Configura los oyentes de eventos para los botones de la interfaz.
+     */
     public menu() {
         super("Ventana Admin");
         setContentPane(panel1);
@@ -168,6 +180,10 @@ public class menu extends JFrame{
             }
         });
     }
+    /**
+     * Inicializa y muestra la ventana.
+     * Configura el tamaño, la ubicación y el comportamiento de cierre de la ventana.
+     */
     public void iniciar(){
         setVisible(true);
         setSize(600,500);
@@ -176,13 +192,24 @@ public class menu extends JFrame{
 
     }
 
+    /**
+     * Establece una conexión con la base de datos utilizando JDBC.
+     *
+     * @return La conexión a la base de datos.
+     * @throws SQLException Si ocurre un error al establecer la conexión.
+     */
     public Connection conexion() throws SQLException {
         String url="jdbc:mysql://uvbmbtmpi0evah2t:MYVCKxotJa0TSwg1SAT3@b4i0oz9mmhxht77tkqpd-mysql.services.clever-cloud.com:3306/b4i0oz9mmhxht77tkqpd";
         String user="uvbmbtmpi0evah2t";
         String password="MYVCKxotJa0TSwg1SAT3";
         return DriverManager.getConnection(url,user,password);
     }
-/*Funciones para la administracion de usuarios*/
+    /**
+     * Busca los datos de un usuario en la base de datos.
+     *
+     * @throws SQLException Si ocurre un error en la consulta SQL.
+     */
+    /*Funciones para la administracion de usuarios*/
     public void buscarDatos() throws SQLException {
         int id_usuario = Integer.parseInt(userb.getText());
         Connection connection = conexion();
@@ -202,6 +229,11 @@ public class menu extends JFrame{
         pstmt.close();
         connection.close();
     }
+    /**
+     * Elimina un usuario de la base de datos.
+     *
+     * @throws SQLException Si ocurre un error en la consulta SQL.
+     */
     public void eliminarDatos() throws SQLException {
         int id_cajero = Integer.parseInt(userb.getText());
         Connection connection = conexion();
@@ -219,6 +251,11 @@ public class menu extends JFrame{
         pstmt.close();
         connection.close();
     }
+    /**
+     * Actualiza los datos de un usuario en la base de datos.
+     *
+     * @throws SQLException Si ocurre un error en la consulta SQL.
+     */
     public void actualizarDatos() throws SQLException {
         int id_cajero = Integer.parseInt(userb.getText());
         String nuevoUsuario = usuario.getText();
@@ -242,6 +279,11 @@ public class menu extends JFrame{
         pstmt.close();
         connection.close();
     }
+    /**
+     * Crea un nuevo usuario en la base de datos.
+     *
+     * @throws SQLException Si ocurre un error en la consulta SQL.
+     */
     public void crearDatos() throws SQLException {
         String nuevoUsuario = usuario.getText();
         String nuevaContrasena = password.getText();
@@ -267,6 +309,12 @@ public class menu extends JFrame{
             connection.close();}
 
     }
+    /**
+     * Actualiza los datos de un producto en la base de datos, incluyendo la imagen del producto.
+     *
+     * @throws SQLException Si ocurre un error en la consulta SQL.
+     * @throws IOException Si ocurre un error al leer el archivo de imagen.
+     */
     /*Funciones para inventarios*/
     public void actualizarDatosInv() throws SQLException, IOException {
         int id_prod = Integer.parseInt(id_buscar.getText());
@@ -321,6 +369,13 @@ public class menu extends JFrame{
         pstmt.close();
         connection.close();
     }
+
+    /**
+     * Agrega un nuevo producto a la base de datos, incluyendo la imagen del producto.
+     *
+     * @throws SQLException Si ocurre un error en la consulta SQL.
+     * @throws IOException Si ocurre un error al leer el archivo de imagen.
+     */
     public void agregarProductos() throws SQLException, IOException {
         String nombre = nom.getText();
         String descripcion = desc.getText();
@@ -360,6 +415,12 @@ public class menu extends JFrame{
             connection.close();
         }
     }
+
+    /**
+     * Busca los datos de un producto en la base de datos.
+     *
+     * @throws SQLException Si ocurre un error en la consulta SQL.
+     */
     public void buscarDatosInv() throws SQLException {
         int id_prod = Integer.parseInt(id_buscar.getText());
         Connection connection = conexion();
@@ -385,6 +446,12 @@ public class menu extends JFrame{
         pstmt.close();
         connection.close();
     }
+
+    /**
+     * Elimina un producto de la base de datos.
+     *
+     * @throws SQLException Si ocurre un error en la consulta SQL.
+     */
     public void eliminarDatosInv() throws SQLException {
         int id_prod = Integer.parseInt(id_buscar.getText());
 
@@ -407,6 +474,12 @@ public class menu extends JFrame{
         pstmt.close();
         connection.close();
     }
+
+    /**
+     * Carga las ventas realizadas por un cajero específico y las muestra en la tabla.
+     *
+     * @throws SQLException Si ocurre un error en la consulta SQL.
+     */
     public void cargarVentasCajero() throws SQLException {
         int cajeroId = Integer.parseInt(idCajerov.getText()); // ID del cajero a buscar
         Connection connection = conexion();

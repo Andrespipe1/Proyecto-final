@@ -20,6 +20,14 @@ import java.sql.*;
 import java.text.DecimalFormat;
 import java.util.Date;
 
+/**
+ * Clase que representa la ventana principal para el cajero en el sistema de minimarket.
+ * Permite realizar operaciones de búsqueda de productos, gestión del carrito de compras,
+ * y realización de compras con generación de notas de venta en PDF.
+ *
+ * @author Andres Tufiño
+ * @version 1.0
+ */
 public class menu_cajero extends JFrame{
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
@@ -34,6 +42,11 @@ public class menu_cajero extends JFrame{
     private JButton cancelarCompraButton;
     private final int cajeroId;
 
+    /**
+     * Constructor de la clase. Inicializa la interfaz gráfica y configura los eventos.
+     *
+     * @param cajeroId El ID del cajero que está utilizando esta ventana para guardar que cajero a iniciado sesion.
+     */
     public menu_cajero(int cajeroId) {
         this.cajeroId = cajeroId;
 
@@ -136,6 +149,11 @@ public class menu_cajero extends JFrame{
         });
     }
 
+    /**
+     * Carga todos los productos disponibles en la base de datos y los muestra en la tabla principal.
+     *
+     * @throws SQLException Si ocurre un error al acceder a la base de datos.
+     */
     public void cargarTodosLosProductos() throws SQLException {
         Connection connection = conexion();
         String sql = "SELECT producto_id, nombre_producto, descripcion, precio, stock, imagen FROM Productos";
@@ -166,6 +184,12 @@ public class menu_cajero extends JFrame{
         pstmt.close();
         connection.close();
     }
+
+    /**
+     * Carga los productos actualmente en el carrito del cajero y los muestra en la tabla del carrito.
+     *
+     * @throws SQLException Si ocurre un error al acceder a la base de datos.
+     */
     public void cargarProductosCarrito() throws SQLException {
         Connection connection = conexion();
         String sql = "SELECT c.producto_id, p.nombre_producto, c.cantidad, p.precio " +
@@ -193,7 +217,11 @@ public class menu_cajero extends JFrame{
         connection.close();
     }
 
-
+    /**
+     * Busca un producto por su ID y lo muestra en la tabla principal.
+     *
+     * @throws SQLException Si ocurre un error al acceder a la base de datos.
+     */
     public void buscarProducto() throws SQLException {
         int id_prod=Integer.parseInt(idBuscar.getText());
         Connection connection = conexion();
@@ -228,6 +256,11 @@ public class menu_cajero extends JFrame{
         connection.close();
     }
 
+    /**
+     * Agrega un producto al carrito basado en el ID proporcionado en el campo de búsqueda.
+     *
+     * @throws SQLException Si ocurre un error al acceder a la base de datos.
+     */
     public void agregarAlCarrito() throws SQLException {
         int productId = Integer.parseInt(idBuscar.getText());
         Connection connection = conexion();
@@ -262,6 +295,13 @@ public class menu_cajero extends JFrame{
         connection.close();
     }
 
+    /**
+     * Realiza la compra de los productos en el carrito, actualiza el stock y genera una nota de venta en PDF.
+     *
+     * @throws SQLException Si ocurre un error al acceder a la base de datos.
+     * @throws DocumentException Si ocurre un error al crear el documento PDF.
+     * @throws IOException Si ocurre un error al guardar el archivo PDF.
+     */
     public void realizarCompra() throws SQLException, DocumentException, IOException {
         Connection connection = conexion();
         // Formateador para los precios
@@ -330,6 +370,14 @@ public class menu_cajero extends JFrame{
         connection.close();
     }
 
+    /**
+     * Genera una nota de venta en formato PDF con los detalles de la compra.
+     *
+     * @param table La tabla con los detalles de los productos comprados.
+     * @param totalPrice El precio total de la compra.
+     * @throws DocumentException Si ocurre un error al crear el documento PDF.
+     * @throws IOException Si ocurre un error al guardar el archivo PDF.
+     */
     public void generarNotaDeVenta(PdfPTable table, double totalPrice) throws DocumentException, IOException {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Guardar Nota de Venta");
@@ -367,6 +415,12 @@ public class menu_cajero extends JFrame{
             JOptionPane.showMessageDialog(null, "Guardado de nota de venta cancelado.");
         }
     }
+
+    /**
+     * Cancela la compra actual eliminando todos los productos del carrito del cajero.
+     *
+     * @throws SQLException Si ocurre un error al acceder a la base de datos.
+     */
     public void cancelarCompra() throws SQLException {
         Connection connection = conexion();
         // Eliminar todos los productos del carrito para el cajero actual
@@ -387,6 +441,13 @@ public class menu_cajero extends JFrame{
         pstmt.close();
         connection.close();
     }
+
+    /**
+     * Establece la conexión con la base de datos.
+     *
+     * @return La conexión a la base de datos.
+     * @throws SQLException Si ocurre un error al establecer la conexión.
+     */
     public Connection conexion() throws SQLException {
         String url = "jdbc:mysql://uvbmbtmpi0evah2t:MYVCKxotJa0TSwg1SAT3@b4i0oz9mmhxht77tkqpd-mysql.services.clever-cloud.com:3306/b4i0oz9mmhxht77tkqpd";
         String user = "uvbmbtmpi0evah2t";
@@ -394,6 +455,9 @@ public class menu_cajero extends JFrame{
         return DriverManager.getConnection(url, user, password);
     }
 
+    /**
+     * Muestra la ventana del cajero con la configuración inicial.
+     */
     public void iniciar() {
         setVisible(true);
         setSize(600, 500);
