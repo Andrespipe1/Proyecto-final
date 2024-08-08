@@ -251,17 +251,21 @@ public class menu extends JFrame{
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setString(1, nuevoUsuario);
         pstmt.setString(2, nuevaContrasena);
-
-        int rowsAffected = pstmt.executeUpdate();
-        if (rowsAffected > 0) {
-            JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
-            usuario.setText("");
-            password.setText("");
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al crear el usuario");
+        if (nuevoUsuario.isEmpty() || nuevaContrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Error llene los campos");
         }
-        pstmt.close();
-        connection.close();
+        else{
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Usuario creado exitosamente");
+                usuario.setText("");
+                password.setText("");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al crear el usuario");
+            }
+            pstmt.close();
+            connection.close();}
+
     }
     /*Funciones para inventarios*/
     public void actualizarDatosInv() throws SQLException, IOException {

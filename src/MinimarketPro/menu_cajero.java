@@ -31,6 +31,7 @@ public class menu_cajero extends JFrame{
     private JTable table1;
     private JButton cargarCarritoButton;
     private JButton logOutButton;
+    private JButton cancelarCompraButton;
     private final int cajeroId;
 
     public menu_cajero(int cajeroId) {
@@ -118,6 +119,16 @@ public class menu_cajero extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                     cargarProductosCarrito();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        cancelarCompraButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    cancelarCompra();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
@@ -356,7 +367,26 @@ public class menu_cajero extends JFrame{
             JOptionPane.showMessageDialog(null, "Guardado de nota de venta cancelado.");
         }
     }
+    public void cancelarCompra() throws SQLException {
+        Connection connection = conexion();
+        // Eliminar todos los productos del carrito para el cajero actual
+        String deleteCarritoSql = "DELETE FROM Carrito WHERE cajero_id = ?";
+        PreparedStatement pstmt = connection.prepareStatement(deleteCarritoSql);
+        pstmt.setInt(1, cajeroId);
+        pstmt.executeUpdate();
 
+        // Recargar los productos en la tabla
+        cargarTodosLosProductos();
+
+        // Vaciar la tabla del carrito
+        DefaultTableModel carritoModel = (DefaultTableModel) table1.getModel();
+        carritoModel.setRowCount(0);
+
+        JOptionPane.showMessageDialog(null, "Compra cancelada y carrito vaciado.");
+
+        pstmt.close();
+        connection.close();
+    }
     public Connection conexion() throws SQLException {
         String url = "jdbc:mysql://uvbmbtmpi0evah2t:MYVCKxotJa0TSwg1SAT3@b4i0oz9mmhxht77tkqpd-mysql.services.clever-cloud.com:3306/b4i0oz9mmhxht77tkqpd";
         String user = "uvbmbtmpi0evah2t";
