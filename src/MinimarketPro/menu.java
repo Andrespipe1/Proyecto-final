@@ -539,7 +539,7 @@ public class menu extends JFrame{
      */
     public void cargarCajeros() throws SQLException {
         Connection connection = conexion();
-        String sql = "SELECT cajero_id, usuario, cargo FROM Cajeros WHERE cargo = 'Cajero';";
+        String sql = "SELECT cajero_id, usuario FROM Cajeros;";
 
         PreparedStatement pstmt = connection.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
@@ -550,7 +550,7 @@ public class menu extends JFrame{
         while (rs.next()) {
             int idCajero = rs.getInt("cajero_id");
             String nombreCajero = rs.getString("usuario");
-            String cargo = rs.getString("cargo");
+            String cargo = "Cajero";
 
             model.addRow(new Object[]{idCajero, nombreCajero, cargo});
         }
